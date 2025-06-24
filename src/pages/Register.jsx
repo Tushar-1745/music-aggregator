@@ -1,5 +1,8 @@
 import React, { useState } from 'react';
 import { Link } from 'react-router-dom';
+import { registerUser } from '../api/userApi';
+
+import { AiOutlineEye, AiOutlineEyeInvisible } from 'react-icons/ai';
 
 const Register = () => {
   const [form, setForm] = useState({
@@ -20,30 +23,43 @@ const Register = () => {
     setError('');
   };
 
-  const handleSubmit = (e) => {
+  const handleSubmit = async (e) => {
     e.preventDefault();
     const { password, confirmPassword, mobile } = form;
-
+  
     const passwordRegex = /^(?=.*[A-Z])(?=.*\d)(?=.*[!@#$%^&*()_+\-=\[\]{};':"\\|,.<>\/?]).{8,}$/;
-
+  
     if (mobile.length !== 10 || !/^\d{10}$/.test(mobile)) {
       setError("Mobile number must be exactly 10 digits.");
       return;
     }
-
+  
     if (password !== confirmPassword) {
       setError("Passwords do not match");
       return;
     }
-
+  
     if (!passwordRegex.test(password)) {
       setError("Password must be at least 8 characters, include 1 uppercase letter, 1 number, and 1 special character.");
       return;
     }
-
-    // TODO: Submit to backend
-    console.log("Register submitted:", form);
+  
+    try {
+      const payload = {
+        firstName: form.firstName,
+        lastName: form.lastName,
+        mobile: form.mobile,
+        email: form.email,
+        password: form.password
+      };
+      const res = await registerUser(payload);
+      alert("✅ Registered successfully!");
+      // optionally redirect or reset form
+    } catch (err) {
+      setError(err.message || "Something went wrong");
+    }
   };
+  
 
   return (
     <div style={styles.container}>
@@ -65,11 +81,8 @@ const Register = () => {
             required
             style={{ ...styles.input, marginBottom: 0 }}
           />
-          <span
-            onClick={() => setShowPassword(!showPassword)}
-            style={styles.eyeIcon}
-          >
-            {showPassword ? '🙈' : '👁️'}
+          <span onClick={() => setShowPassword(!showPassword)} style={styles.eyeIcon}>
+            {showPassword ? <AiOutlineEye size={20} /> : <AiOutlineEyeInvisible size={20} />}
           </span>
         </div>
 
@@ -83,11 +96,8 @@ const Register = () => {
             required
             style={{ ...styles.input, marginBottom: 0 }}
           />
-          <span
-            onClick={() => setShowConfirmPassword(!showConfirmPassword)}
-            style={styles.eyeIcon}
-          >
-            {showConfirmPassword ? '🙈' : '👁️'}
+          <span onClick={() => setShowConfirmPassword(!showConfirmPassword)} style={styles.eyeIcon}>
+            {showConfirmPassword ? <AiOutlineEye size={20} /> : <AiOutlineEyeInvisible size={20} />}
           </span>
         </div>
 
@@ -145,7 +155,7 @@ const styles = {
     right: '10px',
     transform: 'translateY(-50%)',
     cursor: 'pointer',
-    fontSize: '1.2rem'
+    color: '#ccc'
   },
   button: {
     padding: '10px',
@@ -173,3 +183,4 @@ const styles = {
 };
 
 export default Register;
+

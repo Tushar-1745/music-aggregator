@@ -1,17 +1,28 @@
 import React, { useState } from 'react';
 import { Link } from 'react-router-dom';
+import { AiOutlineEye, AiOutlineEyeInvisible } from 'react-icons/ai';
+import { loginUser } from '../api/userApi';
 
 const Login = () => {
   const [form, setForm] = useState({ username: '', password: '' });
+  const [showPassword, setShowPassword] = useState(false);
+  const [error, setError] = useState('');
 
   const handleChange = (e) => {
     setForm({ ...form, [e.target.name]: e.target.value });
+    setError('');
   };
 
-  const handleSubmit = (e) => {
+  const handleSubmit = async (e) => {
     e.preventDefault();
-    // TODO: Call backend login API here
-    console.log('Login submitted:', form);
+    try {
+      const data = await loginUser(form);
+      alert("✅ Login successful!");
+      console.log("User Data:", data);
+      // Optionally store token or redirect user
+    } catch (err) {
+      setError(err.message || "Login failed");
+    }
   };
 
   return (
@@ -28,15 +39,26 @@ const Login = () => {
           required
           style={styles.input}
         />
-        <input
-          type="password"
-          name="password"
-          placeholder="Password"
-          value={form.password}
-          onChange={handleChange}
-          required
-          style={styles.input}
-        />
+
+        <div style={styles.passwordContainer}>
+          <input
+            type={showPassword ? 'text' : 'password'}
+            name="password"
+            placeholder="Password"
+            value={form.password}
+            onChange={handleChange}
+            required
+            style={{ ...styles.input, marginBottom: 0 }}
+          />
+          <span
+            onClick={() => setShowPassword(!showPassword)}
+            style={styles.eyeIcon}
+          >
+            {showPassword ? <AiOutlineEye size={20} /> : <AiOutlineEyeInvisible size={20} />}
+          </span>
+        </div>
+
+        {error && <p style={styles.error}>{error}</p>}
 
         <button type="submit" style={styles.button}>Login</button>
 
@@ -77,7 +99,20 @@ const styles = {
     borderRadius: '5px',
     border: '1px solid #555',
     backgroundColor: '#2c2c2c',
-    color: '#fff'
+    color: '#fff',
+    width: '100%'
+  },
+  passwordContainer: {
+    position: 'relative',
+    marginBottom: '1rem'
+  },
+  eyeIcon: {
+    position: 'absolute',
+    top: '50%',
+    right: '10px',
+    transform: 'translateY(-50%)',
+    cursor: 'pointer',
+    color: '#ccc'
   },
   button: {
     padding: '10px',
@@ -96,6 +131,11 @@ const styles = {
   link: {
     color: '#1db954',
     textDecoration: 'none'
+  },
+  error: {
+    color: '#ff5555',
+    marginBottom: '1rem',
+    textAlign: 'center'
   }
 };
 
