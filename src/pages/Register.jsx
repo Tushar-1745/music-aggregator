@@ -1,10 +1,12 @@
 import React, { useState } from 'react';
-import { Link } from 'react-router-dom';
+import { Link, useNavigate } from 'react-router-dom';   // ← add useNavigate
 import { registerUser } from '../api/userApi';
 
 import { AiOutlineEye, AiOutlineEyeInvisible } from 'react-icons/ai';
 
 const Register = () => {
+  const navigate = useNavigate();  
+
   const [form, setForm] = useState({
     firstName: '',
     lastName: '',
@@ -26,40 +28,41 @@ const Register = () => {
   const handleSubmit = async (e) => {
     e.preventDefault();
     const { password, confirmPassword, mobile } = form;
-  
     const passwordRegex = /^(?=.*[A-Z])(?=.*\d)(?=.*[!@#$%^&*()_+\-=\[\]{};':"\\|,.<>\/?]).{8,}$/;
-  
+
     if (mobile.length !== 10 || !/^\d{10}$/.test(mobile)) {
       setError("Mobile number must be exactly 10 digits.");
       return;
     }
-  
+
     if (password !== confirmPassword) {
       setError("Passwords do not match");
       return;
     }
-  
+
     if (!passwordRegex.test(password)) {
       setError("Password must be at least 8 characters, include 1 uppercase letter, 1 number, and 1 special character.");
       return;
     }
-  
+
     try {
-      const payload = {
+      const res = await registerUser({
         firstName: form.firstName,
         lastName: form.lastName,
         mobile: form.mobile,
         email: form.email,
         password: form.password
-      };
-      const res = await registerUser(payload);
+      });
+
+      // Store token and redirect
+      localStorage.setItem('token', res.token);
       alert("✅ Registered successfully!");
-      // optionally redirect or reset form
+      navigate('/login');
     } catch (err) {
       setError(err.message || "Something went wrong");
     }
   };
-  
+
 
   return (
     <div style={styles.container}>

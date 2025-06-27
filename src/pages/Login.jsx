@@ -1,9 +1,14 @@
 import React, { useState } from 'react';
-import { Link } from 'react-router-dom';
+import { Link, useNavigate } from 'react-router-dom';
 import { AiOutlineEye, AiOutlineEyeInvisible } from 'react-icons/ai';
 import { loginUser } from '../api/userApi';
+import { useAuth } from '../context/AuthContext';
+
+
 
 const Login = () => {
+  const { login } = useAuth(); // ✅ Use context login method
+  const navigate = useNavigate(); // ✅ Fixed here
   const [form, setForm] = useState({ username: '', password: '' });
   const [showPassword, setShowPassword] = useState(false);
   const [error, setError] = useState('');
@@ -16,10 +21,14 @@ const Login = () => {
   const handleSubmit = async (e) => {
     e.preventDefault();
     try {
-      const data = await loginUser(form);
-      alert("✅ Login successful!");
-      console.log("User Data:", data);
-      // Optionally store token or redirect user
+      const success = await login({ username: form.username, password: form.password });
+      if (success) {
+        alert('✅ Login successful!');
+        navigate('/dashboard');
+      } else {
+        setError('Invalid credentials');
+      }
+
     } catch (err) {
       setError(err.message || "Login failed");
     }

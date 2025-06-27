@@ -1,82 +1,91 @@
-import React from 'react';
-import ChartCard from "../components/CharCard"
+import React, { useEffect, useState } from 'react';
+import ViralSongs from '../components/ViralSongs';
+import TrendingArtistsCarousel from '../components/TrendingArtistsCarousel';
+import {
+  fetchTrendingArtists,
+  fetchViralSongs
+} from '../api/songsApi.js';
+import TrendingSongs from '../components/TrendingSongs.jsx';
+import YourPicks from '../components/YourPicks.jsx';
+import { useNavigate } from 'react-router-dom';
 
 const Dashboard = () => {
-  const trendingSongs = [
-    { title: 'Song A', artist: 'Artist 1' },
-    { title: 'Song B', artist: 'Artist 2' },
-    { title: 'Song C', artist: 'Artist 3' },
-    { title: 'Song D', artist: 'Artist 4' },
-    { title: 'Song E', artist: 'Artist 5' }
-  ];
+  const [viralSongs, setViralSongs] = useState([]);
+  const [artists, setArtists] = useState([]);
+  const [loadingArtists, setLoadingArtists] = useState(true);
+
+  const navigate = useNavigate();
+
+  useEffect(() => {
+    fetchViralSongs()
+      .then(setViralSongs)
+      .catch(e => console.error("❌ Viral Songs:", e));
+  }, []);
+
+  useEffect(() => {
+    const loadArtists = async () => {
+      try {
+        const data = await fetchTrendingArtists();
+        setArtists(data);
+      } catch (err) {
+        console.error('❌ Failed to fetch trending artists:', err);
+      } finally {
+        setLoadingArtists(false);
+      }
+    };
+    loadArtists();
+  }, []);
 
   return (
     <div style={{
-      width: '100%',
-      padding: '2rem 4%',
       backgroundColor: '#121212',
-      color: '#fff',
       minHeight: '100vh',
+      padding: '2rem 4%',
+      color: '#fff',
+      overflowY: 'auto'
     }}>
-      <h1 style={{ color: '#1db954', marginBottom: '2rem' }}>Music Trends Dashboard</h1>
+      {/* ✅ Your Picks */}
+      <YourPicks />
 
-      {/* Overview Cards */}
+      <hr style={{ border: '1px solid #1db954', margin: '2rem 0' }} />
+
+      {/* ✅ Viral Songs */}
+      <ViralSongs songs={viralSongs} />
+
+      <hr style={{ border: '1px solid #1db954', margin: '2rem 0' }} />
+
+      {/* ✅ Trending Songs Header + View All */}
       <div style={{
-        display: 'grid',
-        gridTemplateColumns: 'repeat(auto-fit, minmax(250px, 1fr))',
-        gap: '1.5rem',
-        marginBottom: '2rem'
+        display: 'flex',
+        justifyContent: 'space-between',
+        alignItems: 'center',
+        marginBottom: '1rem'
       }}>
-        <ChartCard title="Top Artist" value="Artist Name" />
-        <ChartCard title="Top Genre" value="Pop" />
-        <ChartCard title="Most Viral Song" value="Song Title" />
-        <ChartCard title="Total Streams" value="1.2M" />
+        <h1 style={{ color: '#1db954', margin: 0 }}>🔥 Trending Songs</h1>
+        <button onClick={() => navigate('/trending')} style={{
+          background: 'none',
+          border: 'none',
+          color: '#1db954',
+          fontWeight: 'bold',
+          fontSize: '1rem',
+          cursor: 'pointer',
+          textDecoration: 'underline'
+        }}>
+          View All →
+        </button>
       </div>
 
-      {/* Trending Songs List */}
-      <div style={{
-        backgroundColor: '#1e1e1e',
-        borderRadius: '10px',
-        padding: '1.5rem',
-        marginBottom: '2rem',
-        boxShadow: '0 4px 8px rgba(0,0,0,0.3)'
-      }}>
-        <h2 style={{ color: '#1db954' }}>Top 5 Trending Songs</h2>
-        <ul style={{ marginTop: '1rem', lineHeight: '2' }}>
-          {trendingSongs.map((song, index) => (
-            <li key={index}>
-              <strong>{song.title}</strong> by {song.artist}
-            </li>
-          ))}
-        </ul>
-      </div>
+      <TrendingSongs limit={5} />
 
-      {/* Platform Stats */}
-      <div style={{
-        display: 'grid',
-        gridTemplateColumns: 'repeat(auto-fit, minmax(280px, 1fr))',
-        gap: '1.5rem',
-        marginBottom: '2rem'
-      }}>
-        <ChartCard title="Spotify Streams" value="800K" />
-        <ChartCard title="YouTube Views" value="600K" />
-        <ChartCard title="TikTok Shares" value="300K" />
-      </div>
+      <hr style={{ border: '1px solid #1db954', margin: '2rem 0' }} />
 
-      {/* Weekly Report Summary */}
-      <div style={{
-        backgroundColor: '#1e1e1e',
-        borderRadius: '10px',
-        padding: '1.5rem',
-        boxShadow: '0 4px 8px rgba(0,0,0,0.3)'
-      }}>
-        <h2 style={{ color: '#1db954' }}>This Week's Highlights</h2>
-        <p style={{ marginTop: '1rem' }}>
-          - <strong>Newcomer:</strong> <span style={{ color: '#00bfa6' }}>IndieStar</span> jumped 45% in Spotify streams<br />
-          - <strong>Genre Growth:</strong> EDM saw a 25% rise on YouTube<br />
-          - <strong>Most Viral:</strong> “DanceRush” went viral on TikTok with 180k shares<br />
-        </p>
-      </div>
+      {/* ✅ Trending Artists */}
+      <h1 style={{ color: '#1db954', marginBottom: '1.5rem' }}>🎤 Trending Artists</h1>
+      {!loadingArtists && artists.length > 0 ? (
+        <TrendingArtistsCarousel artists={artists} />
+      ) : (
+        <p>Loading artists...</p>
+      )}
     </div>
   );
 };
