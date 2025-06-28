@@ -42,20 +42,3 @@ export const getUserProfile = async () => {
   return data.user; // { ...user }
 };
 
-// Sync user data (example for protected POST request)
-export const syncUserData = async () => {
-  const token = localStorage.getItem('token');
-  if (!token) throw new Error('Token not found');
-
-  const res = await fetch(`${API_BASE}/api/sync-data`, {
-    method: 'POST',
-    headers: {
-      'Content-Type': 'application/json',
-      Authorization: `Bearer ${token}`,
-    },
-  });
-
-  const data = await res.json();
-  if (!res.ok) throw new Error(data.message || 'Data sync failed');
-  return data;
-};
