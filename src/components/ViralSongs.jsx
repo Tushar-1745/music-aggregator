@@ -5,7 +5,7 @@ const ViralSongs = ({ songs }) => {
 
   return (
     <div>
-      <h1 style={{ color: '#1db954', marginBottom: '1.5rem' }}>🚀 Viral Songs</h1>
+      <h1 style={{ color: '#1db954', margin: 0, fontSize:'30px', marginBottom:'10px' }}>🚀 Viral Songs</h1>
       <div style={{
         display: 'grid',
         gap: '1rem',

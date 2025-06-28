@@ -35,3 +35,5 @@ export const getUserProfile = async () => {
   return data.user;
 };
 
+export const syncUserData = () =>
+  axios.post(`${NODE_API}/api/sync-data`, {}, { headers: getAuthHeaders() });

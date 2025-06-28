@@ -47,7 +47,7 @@ const YourPicks = () => {
         alignItems: 'center',
         marginBottom: '1rem'
       }}>
-        <h1 style={{ color: '#1db954', margin: 0 }}>💚 Your Picks</h1>
+        <h1 style={{ color: '#1db954', margin: 0, fontSize:'30px', marginBottom:'10px' }}>💚 Your Picks</h1>
       </div>
 
       <div style={{

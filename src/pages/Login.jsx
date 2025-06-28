@@ -1,17 +1,15 @@
 import React, { useState } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
 import { AiOutlineEye, AiOutlineEyeInvisible } from 'react-icons/ai';
-import { loginUser } from '../api/userApi';
 import { useAuth } from '../context/AuthContext';
 
-
-
 const Login = () => {
-  const { login } = useAuth(); // ✅ Use context login method
-  const navigate = useNavigate(); // ✅ Fixed here
+  const { login } = useAuth();
+  const navigate = useNavigate();
   const [form, setForm] = useState({ username: '', password: '' });
   const [showPassword, setShowPassword] = useState(false);
   const [error, setError] = useState('');
+  const [loading, setLoading] = useState(false); // ✅ loading state
 
   const handleChange = (e) => {
     setForm({ ...form, [e.target.name]: e.target.value });
@@ -20,6 +18,7 @@ const Login = () => {
 
   const handleSubmit = async (e) => {
     e.preventDefault();
+    setLoading(true); // ✅ start loading
     try {
       const success = await login({ username: form.username, password: form.password });
       if (success) {
@@ -28,9 +27,10 @@ const Login = () => {
       } else {
         setError('Invalid credentials');
       }
-
     } catch (err) {
       setError(err.message || "Login failed");
+    } finally {
+      setLoading(false); // ✅ stop loading
     }
   };
 
@@ -69,7 +69,9 @@ const Login = () => {
 
         {error && <p style={styles.error}>{error}</p>}
 
-        <button type="submit" style={styles.button}>Login</button>
+        <button type="submit" style={styles.button} disabled={loading}>
+          {loading ? 'Loading...' : 'Login'}
+        </button>
 
         <p style={styles.text}>
           Don’t have an account? <Link to="/register" style={styles.link}>Register</Link>
@@ -130,7 +132,8 @@ const styles = {
     fontWeight: 'bold',
     border: 'none',
     borderRadius: '5px',
-    cursor: 'pointer'
+    cursor: 'pointer',
+    textAlign: 'center'
   },
   text: {
     color: '#ccc',

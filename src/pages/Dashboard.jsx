@@ -1,19 +1,16 @@
 import React, { useEffect, useState } from 'react';
 import ViralSongs from '../components/ViralSongs';
 import TrendingArtistsCarousel from '../components/TrendingArtistsCarousel';
-import {
-  fetchTrendingArtists,
-  fetchViralSongs
-} from '../api/songsApi.js';
 import TrendingSongs from '../components/TrendingSongs.jsx';
 import YourPicks from '../components/YourPicks.jsx';
+import { fetchTrendingArtists, fetchViralSongs } from '../api/songsApi.js';
 import { useNavigate } from 'react-router-dom';
 
 const Dashboard = () => {
   const [viralSongs, setViralSongs] = useState([]);
   const [artists, setArtists] = useState([]);
   const [loadingArtists, setLoadingArtists] = useState(true);
-
+  const [search, setSearch] = useState('');
   const navigate = useNavigate();
 
   useEffect(() => {
@@ -44,48 +41,76 @@ const Dashboard = () => {
       color: '#fff',
       overflowY: 'auto'
     }}>
-      {/* ✅ Your Picks */}
-      <YourPicks />
-
-      <hr style={{ border: '1px solid #1db954', margin: '2rem 0' }} />
-
-      {/* ✅ Viral Songs */}
-      <ViralSongs songs={viralSongs} />
-
-      <hr style={{ border: '1px solid #1db954', margin: '2rem 0' }} />
-
-      {/* ✅ Trending Songs Header + View All */}
-      <div style={{
-        display: 'flex',
-        justifyContent: 'space-between',
-        alignItems: 'center',
-        marginBottom: '1rem'
-      }}>
-        <h1 style={{ color: '#1db954', margin: 0 }}>🔥 Trending Songs</h1>
-        <button onClick={() => navigate('/trending')} style={{
-          background: 'none',
-          border: 'none',
-          color: '#1db954',
-          fontWeight: 'bold',
-          fontSize: '1rem',
-          cursor: 'pointer',
-          textDecoration: 'underline'
-        }}>
-          View All →
-        </button>
+      {/* 🔍 Search Box */}
+      <div style={{ marginBottom: '2rem' }}>
+        <input
+          type="text"
+          value={search}
+          onChange={e => setSearch(e.target.value)}
+          placeholder="Search song"
+          style={{
+            width: '100%',
+            padding: '0.75rem 1rem',
+            borderRadius: '8px',
+            border: 'none',
+            backgroundColor: '#1e1e1e',
+            color: '#fff',
+            fontSize: '1rem',
+            outline: 'none'
+          }}
+        />
       </div>
 
-      <TrendingSongs limit={5} />
+      {/* 💚 Your Picks */}
+      <section style={{ marginBottom: '3rem' }}>
+        <YourPicks />
+      </section>
 
       <hr style={{ border: '1px solid #1db954', margin: '2rem 0' }} />
 
-      {/* ✅ Trending Artists */}
-      <h1 style={{ color: '#1db954', marginBottom: '1.5rem' }}>🎤 Trending Artists</h1>
-      {!loadingArtists && artists.length > 0 ? (
-        <TrendingArtistsCarousel artists={artists} />
-      ) : (
-        <p>Loading artists...</p>
-      )}
+      {/* 🎵 Viral Songs */}
+      <section style={{ marginBottom: '3rem' }}>
+        <ViralSongs songs={viralSongs} />
+      </section>
+
+      <hr style={{ border: '1px solid #1db954', margin: '2rem 0' }} />
+
+      {/* 🔥 Trending Songs */}
+      <section style={{ marginBottom: '3rem' }}>
+        <div style={{
+          display: 'flex',
+          justifyContent: 'space-between',
+          alignItems: 'center',
+          marginBottom: '1rem'
+        }}>
+          <h1 style={{ color: '#1db954', margin: 0, fontSize: '30px', marginBottom: '10px' }}>
+            🔥 Trending Songs
+          </h1>
+          <button onClick={() => navigate('/trending')} style={{
+            background: 'none',
+            border: 'none',
+            color: '#1db954',
+            fontWeight: 'bold',
+            fontSize: '1rem',
+            cursor: 'pointer',
+            textDecoration: 'underline'
+          }}>
+            View All →
+          </button>
+        </div>
+        <TrendingSongs limit={5} />
+      </section>
+
+      <hr style={{ border: '1px solid #1db954', margin: '2rem 0' }} />
+
+      {/* 🎤 Trending Artists */}
+      <section style={{ marginBottom: '3rem' }}>
+        {!loadingArtists && artists.length > 0 ? (
+          <TrendingArtistsCarousel artists={artists} />
+        ) : (
+          <p style={{ color: '#ccc' }}>Loading artists...</p>
+        )}
+      </section>
     </div>
   );
 };
