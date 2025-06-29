@@ -22,6 +22,15 @@ const Dashboard = () => {
       .catch(e => console.error("❌ Failed to fetch viral songs:", e));
   }, []);
 
+  useEffect(() => {
+    console.log("🟢 trendingSongs state updated:", trendingSongs);
+  }, [trendingSongs]);
+  
+  useEffect(() => {
+    console.log("🟣 artists state updated:", artists);
+  }, [artists]);
+
+  
   // Fetch Trending Songs + Artists after getting user profile
   useEffect(() => {
     const loadData = async () => {
@@ -36,9 +45,13 @@ const Dashboard = () => {
           fetchTrendingSongs(user.email),
           fetchTrendingArtists(user.email)
         ]);
-
+        
+        console.log("✅ Trending songs fetched:", fetchedSongs);
+        console.log("✅ Trending artists fetched:", fetchedArtists);
+        
         setTrendingSongs(fetchedSongs || []);
         setArtists(fetchedArtists || []);
+        
       } catch (err) {
         console.error("❌ Error loading data:", err);
       } finally {
