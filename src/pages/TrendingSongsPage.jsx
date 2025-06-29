@@ -1,5 +1,4 @@
 import React, { useEffect, useState } from 'react';
-import Sidebar from '../components/Sidebar';
 import { fetchTrendingSongs } from '../api/songsApi';
 import { getUserProfile } from '../api/userApi';
 
@@ -43,58 +42,55 @@ const TrendingSongsPage = () => {
   }, [search, songs]);
 
   return (
-    <div style={{ display: 'flex', backgroundColor: '#121212', color: '#fff' }}>
-      <Sidebar />
-      <div style={{ flex: 1, padding: '2rem 4%' }}>
-        <h1 style={{ color: '#1db954', marginBottom: '1.5rem' }}>🔥 All Trending Songs</h1>
+    <div style={{ backgroundColor: '#121212', color: '#fff', minHeight: '100vh', padding: '2rem 4%' }}>
+      <h1 style={{ color: '#1db954', marginBottom: '1.5rem' }}>🔥 All Trending Songs</h1>
 
-        {/* 🔍 Search */}
-        <input
-          type="text"
-          value={search}
-          onChange={e => setSearch(e.target.value)}
-          placeholder="Search by song or artist"
+      {/* 🔍 Search */}
+      <input
+        type="text"
+        value={search}
+        onChange={e => setSearch(e.target.value)}
+        placeholder="Search by song or artist"
+        style={{
+          width: '100%',
+          padding: '0.75rem 1rem',
+          marginBottom: '2rem',
+          borderRadius: '8px',
+          border: 'none',
+          backgroundColor: '#1e1e1e',
+          color: '#fff',
+          fontSize: '1rem',
+          outline: 'none'
+        }}
+      />
+
+      {loading ? (
+        <p>Loading...</p>
+      ) : (
+        <div
           style={{
-            width: '100%',
-            padding: '0.75rem 1rem',
-            marginBottom: '2rem',
-            borderRadius: '8px',
-            border: 'none',
-            backgroundColor: '#1e1e1e',
-            color: '#fff',
-            fontSize: '1rem',
-            outline: 'none'
+            display: 'grid',
+            gridTemplateColumns: 'repeat(auto-fill, minmax(220px, 1fr))',
+            gap: '1.5rem'
           }}
-        />
-
-        {loading ? (
-          <p>Loading...</p>
-        ) : (
-          <div
-            style={{
-              display: 'grid',
-              gridTemplateColumns: 'repeat(auto-fill, minmax(220px, 1fr))',
-              gap: '1.5rem'
-            }}
-          >
-            {filteredSongs.map((song, index) => (
-              <div
-                key={index}
-                style={{
-                  backgroundColor: '#1e1e1e',
-                  borderRadius: '12px',
-                  padding: '1rem',
-                  boxShadow: '0 2px 8px rgba(0,0,0,0.3)'
-                }}
-              >
-                <h3 style={{ color: '#1db954', fontSize: '1rem' }}>{song.title}</h3>
-                <p style={{ fontSize: '0.9rem', color: '#ccc' }}>{song.artist}</p>
-                <p style={{ fontSize: '0.8rem', color: '#888' }}>Score: {song.score}</p>
-              </div>
-            ))}
-          </div>
-        )}
-      </div>
+        >
+          {filteredSongs.map((song, index) => (
+            <div
+              key={index}
+              style={{
+                backgroundColor: '#1e1e1e',
+                borderRadius: '12px',
+                padding: '1rem',
+                boxShadow: '0 2px 8px rgba(0,0,0,0.3)'
+              }}
+            >
+              <h3 style={{ color: '#1db954', fontSize: '1rem' }}>{song.title}</h3>
+              <p style={{ fontSize: '0.9rem', color: '#ccc' }}>{song.artist}</p>
+              <p style={{ fontSize: '0.8rem', color: '#888' }}>Score: {song.score}</p>
+            </div>
+          ))}
+        </div>
+      )}
     </div>
   );
 };

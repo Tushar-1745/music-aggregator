@@ -1,7 +1,7 @@
 import React, { useState } from 'react';
 import { Link, useLocation } from 'react-router-dom';
 import { FaUserCircle } from 'react-icons/fa';
-import { useAuth } from '../context/AuthContext'; // ✅ Use AuthContext
+import { useAuth } from '../context/AuthContext';
 
 const navLinkStyle = {
   margin: '0 1rem',
@@ -16,7 +16,7 @@ const navLinkStyle = {
 const Navbar = () => {
   const [hovered, setHovered] = useState(null);
   const location = useLocation();
-  const { user } = useAuth(); // ✅ Reactively detect login status
+  const { user } = useAuth();
 
   const links = [
     { label: 'Dashboard', path: '/' },
@@ -47,7 +47,7 @@ const Navbar = () => {
         color: '#fff',
       }}
     >
-      <h2 style={{ margin: 0 }}>MusicTrend</h2>
+      <h2 style={{ margin: 0, fontWeight: 700 }}>MusicAggregator</h2> {/* ✅ updated brand name */}
       <div style={{ display: 'flex', alignItems: 'center' }}>
         {links.map((link, idx) => (
           <Link
