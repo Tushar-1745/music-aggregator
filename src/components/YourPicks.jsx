@@ -40,7 +40,7 @@ const YourPicks = () => {
 
   if (tracks.length === 0) {
     const token = localStorage.getItem('token');
-    const spotifyAuthURL = `${import.meta.env.VITE_API_URL}/api/auth/spotify/login?token=${token}`;
+    const spotifyAuthURL = `${import.meta.env.VITE_API_URL}/api/auth/spotify/login?token=${token}&show_dialog=true`; // ✅ fixed line
 
     return (
       <div style={{
@@ -73,7 +73,6 @@ const YourPicks = () => {
     );
   }
 
-
   return (
     <div style={{ position: 'relative', padding: '1rem 0' }}>
       <div style={{
@@ -86,7 +85,6 @@ const YourPicks = () => {
       </div>
 
       <div style={{ position: 'relative', padding: '0 2rem' }}>
-        {/* Scroll Buttons */}
         <button onClick={() => scroll(-1)} style={scrollButtonStyle('left')}>←</button>
 
         <div
@@ -146,7 +144,6 @@ const YourPicks = () => {
         <button onClick={() => scroll(1)} style={scrollButtonStyle('right')}>→</button>
       </div>
 
-      {/* Pagination Dots */}
       <div style={{ textAlign: 'center', marginTop: '1rem' }}>
         {Array.from({ length: totalPages }).map((_, index) => (
           <span
