@@ -86,13 +86,6 @@ const Dashboard = () => {
 
       <hr style={{ border: '1px solid #1db954', margin: '2rem 0' }} />
 
-      {/* 🎵 Viral Songs */}
-      <section style={{ marginBottom: '3rem' }}>
-        <ViralSongs songs={viralSongs} />
-      </section>
-
-      <hr style={{ border: '1px solid #1db954', margin: '2rem 0' }} />
-
       {/* 🔥 Trending Songs */}
       <section style={{ marginBottom: '3rem' }}>
         <div style={{
