@@ -14,7 +14,7 @@ const YourPicks = () => {
     const loadTracks = async () => {
       try {
         const data = await fetchUserTopTracks();
-        setTracks(data);
+        setTracks(data || []);
       } catch (err) {
         console.error("❌ Failed to fetch user top tracks:", err);
       } finally {
@@ -37,7 +37,37 @@ const YourPicks = () => {
   };
 
   if (loading) return <p>Loading your picks...</p>;
-  if (tracks.length === 0) return <p>No top tracks found.</p>;
+
+  if (!tracks.length) {
+    return (
+      <div style={{
+        backgroundColor: '#1e1e1e',
+        padding: '2rem',
+        borderRadius: '12px',
+        textAlign: 'center',
+        color: '#ccc'
+      }}>
+        <p style={{ marginBottom: '1rem', fontSize: '1.1rem' }}>
+          🎧 Connect with Spotify to see your picks
+        </p>
+        <button
+          onClick={() => window.open(`${import.meta.env.VITE_API_URL}/auth/spotify`, '_blank')}
+          style={{
+            backgroundColor: '#1db954',
+            border: 'none',
+            borderRadius: '20px',
+            color: 'white',
+            padding: '0.75rem 1.5rem',
+            cursor: 'pointer',
+            fontWeight: 'bold',
+            fontSize: '1rem'
+          }}
+        >
+          Connect Spotify
+        </button>
+      </div>
+    );
+  }
 
   return (
     <div style={{ position: 'relative', padding: '1rem 0' }}>
@@ -50,10 +80,7 @@ const YourPicks = () => {
         <h1 style={{ color: '#1db954', margin: 0, fontSize:'30px', marginBottom:'10px' }}>💚 Your Picks</h1>
       </div>
 
-      <div style={{
-        position: 'relative',
-        padding: '0 2rem'
-      }}>
+      <div style={{ position: 'relative', padding: '0 2rem' }}>
         {/* Scroll Buttons */}
         <button onClick={() => scroll(-1)} style={scrollButtonStyle('left')}>←</button>
 
