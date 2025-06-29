@@ -25,19 +25,25 @@ const Dashboard = () => {
   // Fetch Trending Songs + Artists after getting user profile
   useEffect(() => {
     const loadData = async () => {
-      const user = await getUserProfile();
-      if (!user?.email) {
-        console.warn("❌ No user email for tenantId");
-        return;
+      try {
+        const user = await getUserProfile();
+        if (!user?.email) {
+          console.warn("❌ No user email for tenantId");
+          return;
+        }
+
+        const [fetchedSongs, fetchedArtists] = await Promise.all([
+          fetchTrendingSongs(user.email),
+          fetchTrendingArtists(user.email)
+        ]);
+
+        setTrendingSongs(fetchedSongs || []);
+        setArtists(fetchedArtists || []);
+      } catch (err) {
+        console.error("❌ Error loading data:", err);
+      } finally {
+        setLoadingArtists(false);
       }
-
-      const [fetchedSongs, fetchedArtists] = await Promise.all([
-        fetchTrendingSongs(user.email),
-        fetchTrendingArtists(user.email)
-      ]);
-
-      setSongs(fetchedSongs.slice(0, 5));
-      setArtists(fetchedArtists);
     };
 
     loadData();
