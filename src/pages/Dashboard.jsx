@@ -3,12 +3,14 @@
 // import TrendingArtistsCarousel from '../components/TrendingArtistsCarousel';
 // import TrendingSongs from '../components/TrendingSongs.jsx';
 // import YourPicks from '../components/YourPicks.jsx';
-// import { fetchTrendingArtists, fetchViralSongs } from '../api/songsApi.js';
+// import { fetchTrendingArtists, fetchTrendingSongs, fetchViralSongs } from '../api/songsApi.js';
+// import { getUserProfile } from '../api/userApi.js';
 // import { useNavigate } from 'react-router-dom';
 
 // const Dashboard = () => {
 //   const [viralSongs, setViralSongs] = useState([]);
 //   const [artists, setArtists] = useState([]);
+//   const [trendingSongs, setTrendingSongs] = useState([]);
 //   const [loadingArtists, setLoadingArtists] = useState(true);
 //   const [search, setSearch] = useState('');
 //   const navigate = useNavigate();
@@ -20,17 +22,22 @@
 //   }, []);
 
 //   useEffect(() => {
-//     const loadArtists = async () => {
+//     const loadData = async () => {
 //       try {
-//         const data = await fetchTrendingArtists();
-//         setArtists(data);
+//         const user = await getUserProfile(); // tenantId = user.email
+//         const [songs, artists] = await Promise.all([
+//           fetchTrendingSongs(user.email),
+//           fetchTrendingArtists(user.email),
+//         ]);
+//         setTrendingSongs(songs);
+//         setArtists(artists);
 //       } catch (err) {
-//         console.error('❌ Failed to fetch trending artists:', err);
+//         console.error('❌ Failed to load dashboard data:', err);
 //       } finally {
 //         setLoadingArtists(false);
 //       }
 //     };
-//     loadArtists();
+//     loadData();
 //   }, []);
 
 //   return (
@@ -98,7 +105,7 @@
 //             View All →
 //           </button>
 //         </div>
-//         <TrendingSongs limit={5} />
+//         <TrendingSongs songs={trendingSongs.slice(0, 5)} />
 //       </section>
 
 //       <hr style={{ border: '1px solid #1db954', margin: '2rem 0' }} />
