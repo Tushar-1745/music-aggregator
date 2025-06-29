@@ -13,19 +13,6 @@ export const registerUser = async (userData) => {
   return data; // { token, user }
 };
 
-// Login user
-export const loginUser = async (credentials) => {
-  const res = await fetch(`${API_BASE}/login`, {
-    method: 'POST',
-    headers: { 'Content-Type': 'application/json' },
-    body: JSON.stringify(credentials),
-  });
-
-  const data = await res.json();
-  if (!res.ok) throw new Error(data.message || 'Login failed');
-  return data; // { token }
-};
-
 // Get user profile
 export const getUserProfile = async () => {
   const token = localStorage.getItem('token');
