@@ -1,7 +1,6 @@
 import React, { useEffect, useState } from 'react';
 import ViralSongs from '../components/ViralSongs';
 import TrendingArtistsCarousel from '../components/TrendingArtistsCarousel';
-import TrendingSongs from '../components/TrendingSongs.jsx';
 import YourPicks from '../components/YourPicks.jsx';
 import { fetchTrendingArtists, fetchTrendingSongs, fetchViralSongs } from '../api/songsApi.js';
 import { getUserProfile } from '../api/userApi.js';
@@ -12,7 +11,6 @@ const Dashboard = () => {
   const [artists, setArtists] = useState([]);
   const [trendingSongs, setTrendingSongs] = useState([]);
   const [loadingArtists, setLoadingArtists] = useState(true);
-  const [search, setSearch] = useState('');
   const navigate = useNavigate();
 
   useEffect(() => {
@@ -21,7 +19,6 @@ const Dashboard = () => {
       .catch(e => console.error("❌ Failed to fetch viral songs:", e));
   }, []);
 
-  // Fetch trending data
   useEffect(() => {
     const loadData = async () => {
       try {
@@ -59,25 +56,6 @@ const Dashboard = () => {
       color: '#fff',
       overflowY: 'auto'
     }}>
-      {/* 🔍 Search */}
-      <div style={{ marginBottom: '2rem' }}>
-        <input
-          type="text"
-          value={search}
-          onChange={e => setSearch(e.target.value)}
-          placeholder="Search song"
-          style={{
-            width: '100%',
-            padding: '0.75rem 1rem',
-            borderRadius: '8px',
-            border: 'none',
-            backgroundColor: '#1e1e1e',
-            color: '#fff',
-            fontSize: '1rem',
-            outline: 'none'
-          }}
-        />
-      </div>
 
       {/* 💚 Your Picks */}
       <section style={{ marginBottom: '3rem' }}>
@@ -138,7 +116,6 @@ const Dashboard = () => {
             </div>
           ))}
         </div>
-
       </section>
 
       <hr style={{ border: '1px solid #1db954', margin: '2rem 0' }} />
