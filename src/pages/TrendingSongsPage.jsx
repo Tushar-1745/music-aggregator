@@ -13,7 +13,7 @@ const TrendingSongsPage = () => {
       try {
         const user = await getUserProfile();
         if (!user || !user.email) {
-          console.error("❌ No valid user found for tenantId");
+          console.warn("❌ No valid user found for tenantId");
           return;
         }
 

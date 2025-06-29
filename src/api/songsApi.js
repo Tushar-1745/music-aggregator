@@ -106,33 +106,34 @@ export const fetchViralSongs = () => {
       return [];
     });
 };
-
-// 🔥 Fetch Trending Songs (Python microservice)
+// 🔥 Trending Songs
 export const fetchTrendingSongs = async (tenantId) => {
-  console.log("📡 Sending request to trending-songs with tenantId:", tenantId);
+  if (!tenantId) {
+    console.warn("⛔ Skipping trending songs fetch: tenantId is undefined");
+    return [];
+  }
 
-  const res = await axios.post(`${PY_API}/trending-songs`, { tenantId });
-  console.log("🎵 Trending songs are:", res.data);
-  return res.data;
+  try {
+    console.log("📡 Sending request to trending-songs with tenantId:", tenantId);
+    const res = await axios.post(`${PY_API}/trending-songs`, { tenantId });
+    console.log("🎵 Trending songs are:", res.data);
+    return res.data;
+  } catch (err) {
+    console.error("❌ fetchTrendingSongs failed:", err);
+    return [];
+  }
 };
 
-// 🎤 Fetch Trending Artists (Python microservice)
+// 🎤 Trending Artists
 export const fetchTrendingArtists = async (tenantId) => {
-  const res = await axios.post(`${PY_API}/trending-artists`, { tenantId });
-  console.log("🎤 Trending artists are:", res.data);
-  return res.data;
-};
+  if (!tenantId) return [];
 
-// 📊 Fetch Weekly Report (Python microservice)
-export const fetchWeeklyReport = async (tenantId) => {
-  const res = await axios.post(`${PY_API}/weekly-report`, { tenantId });
-  console.log("📈 Weekly report is:", res.data);
-  return res.data;
-};
-
-// 🎶 Fetch Genre Movement (Python microservice)
-export const fetchGenreMovement = async (tenantId) => {
-  const res = await axios.post(`${PY_API}/genre-movement`, { tenantId });
-  console.log("🎼 Genre movement is:", res.data);
-  return res.data;
+  try {
+    const res = await axios.post(`${PY_API}/trending-artists`, { tenantId });
+    console.log("🎤 Trending artists are:", res.data);
+    return res.data;
+  } catch (err) {
+    console.error("❌ fetchTrendingArtists failed:", err);
+    return [];
+  }
 };
