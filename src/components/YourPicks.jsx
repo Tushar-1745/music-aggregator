@@ -38,20 +38,24 @@ const YourPicks = () => {
 
   if (loading) return <p>Loading your picks...</p>;
 
-  if (!tracks.length) {
+  if (tracks.length === 0) {
+    const token = localStorage.getItem('token');
+    const spotifyAuthURL = `${import.meta.env.VITE_API_URL}/api/auth/spotify/login?token=${token}`;
+
     return (
       <div style={{
         backgroundColor: '#1e1e1e',
         padding: '2rem',
         borderRadius: '12px',
         textAlign: 'center',
-        color: '#ccc'
+        color: '#fff'
       }}>
-        <p style={{ marginBottom: '1rem', fontSize: '1.1rem' }}>
-          🎧 Connect with Spotify to see your picks
+        <h2 style={{ marginBottom: '1rem' }}>💚 No top tracks found</h2>
+        <p style={{ marginBottom: '1.5rem', color: '#aaa' }}>
+          Connect your Spotify account to fetch your top tracks.
         </p>
         <button
-          onClick={() => window.open(`${import.meta.env.VITE_API_URL}/auth/spotify`, '_blank')}
+          onClick={() => window.open(spotifyAuthURL, '_blank')}
           style={{
             backgroundColor: '#1db954',
             border: 'none',
@@ -69,6 +73,7 @@ const YourPicks = () => {
     );
   }
 
+
   return (
     <div style={{ position: 'relative', padding: '1rem 0' }}>
       <div style={{
@@ -77,7 +82,7 @@ const YourPicks = () => {
         alignItems: 'center',
         marginBottom: '1rem'
       }}>
-        <h1 style={{ color: '#1db954', margin: 0, fontSize:'30px', marginBottom:'10px' }}>💚 Your Picks</h1>
+        <h1 style={{ color: '#1db954', margin: 0, fontSize: '30px', marginBottom: '10px' }}>💚 Your Picks</h1>
       </div>
 
       <div style={{ position: 'relative', padding: '0 2rem' }}>
