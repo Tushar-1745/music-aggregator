@@ -20,7 +20,6 @@ const Navbar = () => {
 
   const links = [
     { label: 'Dashboard', path: '/' },
-    { label: 'Trends', path: '/trends' },
     { label: 'Reports', path: '/reports' },
   ];
 

@@ -1,21 +1,19 @@
 import React, { useEffect, useState } from 'react';
-import { useNavigate, useLocation } from 'react-router-dom'; // 👈 added useLocation
+import { useNavigate, useLocation } from 'react-router-dom';
 import { useAuth } from '../context/AuthContext';
 import { getUserProfile } from '../api/userApi';
 
 const ProfilePage = () => {
   const { logout } = useAuth();
   const navigate = useNavigate();
-  const location = useLocation(); // 👈 get query params
+  const location = useLocation();
   const [user, setUser] = useState(null);
-  const [showSpotifySuccess, setShowSpotifySuccess] = useState(false); // 👈 new state
+  const [showSpotifySuccess, setShowSpotifySuccess] = useState(false);
 
-  // detect `spotify=success` in URL
   useEffect(() => {
     const params = new URLSearchParams(location.search);
     if (params.get('spotify') === 'success') {
       setShowSpotifySuccess(true);
-      // remove the query after 3s
       setTimeout(() => {
         navigate('/profile', { replace: true });
       }, 3000);
@@ -63,12 +61,6 @@ const ProfilePage = () => {
           <p><strong>Mobile:</strong> {user.mobile}</p>
           <p><strong>Tenant:</strong> {user.tenantId}</p>
         </div>
-        <a
-          href={`http://localhost:5000/api/auth/spotify/login?token=${localStorage.getItem('token')}`}
-          style={{ textDecoration: 'none' }}
-        >
-          <button style={styles.connectBtn}>Connect with Spotify</button>
-        </a>
         <button onClick={handleLogout} style={styles.logoutBtn}>Logout</button>
       </div>
     </div>
@@ -124,17 +116,6 @@ const styles = {
     lineHeight: '1.8',
     fontSize: '1rem',
     marginBottom: '2rem',
-  },
-  connectBtn: {
-    width: '100%',
-    padding: '0.75rem',
-    backgroundColor: '#1ed760',
-    color: '#000',
-    fontWeight: 'bold',
-    border: 'none',
-    borderRadius: '5px',
-    cursor: 'pointer',
-    marginBottom: '1rem',
   },
   logoutBtn: {
     width: '100%',
