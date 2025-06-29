@@ -116,7 +116,36 @@ const Dashboard = () => {
             View All →
           </button>
         </div>
-        <TrendingSongs songs={trendingSongs} />
+        <div
+          style={{
+            display: 'grid',
+            gridTemplateColumns: 'repeat(auto-fill, minmax(220px, 1fr))',
+            gap: '1.5rem'
+          }}
+        >
+          {trendingSongs.map((song, index) => (
+            <div
+              key={index}
+              style={{
+                backgroundColor: '#1e1e1e',
+                borderRadius: '12px',
+                padding: '1rem',
+                boxShadow: '0 2px 8px rgba(0,0,0,0.3)'
+              }}
+            >
+              <h3 style={{ color: '#1db954', fontSize: '1rem', marginBottom: '0.5rem' }}>
+                {song.title}
+              </h3>
+              <p style={{ fontSize: '0.9rem', color: '#ccc', marginBottom: '0.25rem' }}>
+                {song.artist}
+              </p>
+              <p style={{ fontSize: '0.8rem', color: '#888' }}>
+                Score: {song.score}
+              </p>
+            </div>
+          ))}
+        </div>
+
       </section>
 
       <hr style={{ border: '1px solid #1db954', margin: '2rem 0' }} />
