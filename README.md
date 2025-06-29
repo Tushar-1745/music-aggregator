@@ -58,7 +58,7 @@ VITE_PY_API=https://music-aggregator-python.onrender.com
 
 
 # Clone the frontend repo
-git clone https://github.com/your-username/music-trend-aggregator-client.git
+git clone https://github.com/tushar-1745/music-trend-aggregator-client.git
 cd music-trend-aggregator-client
 
 # Install dependencies
