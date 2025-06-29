@@ -15,23 +15,13 @@ const Dashboard = () => {
   const [search, setSearch] = useState('');
   const navigate = useNavigate();
 
-  // Fetch Viral Songs on mount
   useEffect(() => {
     fetchViralSongs()
       .then(setViralSongs)
       .catch(e => console.error("❌ Failed to fetch viral songs:", e));
   }, []);
 
-  useEffect(() => {
-    console.log("🟢 trendingSongs state updated:", trendingSongs);
-  }, [trendingSongs]);
-  
-  useEffect(() => {
-    console.log("🟣 artists state updated:", artists);
-  }, [artists]);
-
-  
-  // Fetch Trending Songs + Artists after getting user profile
+  // Fetch trending data
   useEffect(() => {
     const loadData = async () => {
       try {
@@ -45,13 +35,12 @@ const Dashboard = () => {
           fetchTrendingSongs(user.email),
           fetchTrendingArtists(user.email)
         ]);
-        
+
         console.log("✅ Trending songs fetched:", fetchedSongs);
         console.log("✅ Trending artists fetched:", fetchedArtists);
-        
-        setTrendingSongs(fetchedSongs || []);
+
+        setTrendingSongs(fetchedSongs.slice(0, 5));
         setArtists(fetchedArtists || []);
-        
       } catch (err) {
         console.error("❌ Error loading data:", err);
       } finally {
@@ -70,7 +59,7 @@ const Dashboard = () => {
       color: '#fff',
       overflowY: 'auto'
     }}>
-      {/* 🔍 Search Box */}
+      {/* 🔍 Search */}
       <div style={{ marginBottom: '2rem' }}>
         <input
           type="text"
@@ -112,7 +101,7 @@ const Dashboard = () => {
           alignItems: 'center',
           marginBottom: '1rem'
         }}>
-          <h1 style={{ color: '#1db954', margin: 0, fontSize: '30px', marginBottom: '10px' }}>
+          <h1 style={{ color: '#1db954', margin: 0, fontSize: '30px' }}>
             🔥 Trending Songs
           </h1>
           <button onClick={() => navigate('/trending')} style={{
@@ -127,7 +116,7 @@ const Dashboard = () => {
             View All →
           </button>
         </div>
-        <TrendingSongs songs={trendingSongs.slice(0, 5)} />
+        <TrendingSongs songs={trendingSongs} />
       </section>
 
       <hr style={{ border: '1px solid #1db954', margin: '2rem 0' }} />
