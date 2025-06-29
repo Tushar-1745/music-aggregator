@@ -149,21 +149,8 @@ const Dashboard = () => {
   }, []);
 
   useEffect(() => {
-    const loadData = async () => {
-      try {
-        const user = await getUserProfile(); // tenantId = user.email
-        const [songs, artists] = await Promise.all([
-          fetchTrendingSongs(user.email),
-          fetchTrendingArtists(user.email),
-        ]);
-        setTrendingSongs(songs);
-        setArtists(artists);
-      } catch (err) {
-        console.error('❌ Failed to load dashboard data:', err);
-      } finally {
-        setLoadingArtists(false);
-      }
-    };
+
+
     loadData();
   }, []);
 
